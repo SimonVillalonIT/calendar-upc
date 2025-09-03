@@ -1,3 +1,10 @@
+export type Profile = {
+  id: string
+  email: string | null
+  name: string | null
+  role: "admin" | "teacher"  
+}
+
 export type CalendarProps = {
   events: CalendarEvent[]
   setEvents: (events: CalendarEvent[]) => void
@@ -16,12 +23,16 @@ export type CalendarContextType = CalendarProps & {
   selectedEvent: CalendarEvent | null
   setSelectedEvent: (event: CalendarEvent | null) => void
 }
+
 export type CalendarEvent = {
   id: string
   title: string
-  color: string
-  start: Date
-  end: Date
+  description?: string
+  priority?: string
+  target?: string
+  start_date: Date
+  end_date: Date
+  author: Profile 
 }
 
 export const calendarModes = ['day', 'week', 'month'] as const

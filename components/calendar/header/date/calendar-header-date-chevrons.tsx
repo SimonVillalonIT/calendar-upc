@@ -10,6 +10,8 @@ import {
   subMonths,
   subWeeks,
 } from 'date-fns'
+import { es } from 'date-fns/locale'
+import { capitalizeFirstLetter } from '@/lib/utils'
 
 export default function CalendarHeaderDateChevrons() {
   const { mode, date, setDate } = useCalendarContext()
@@ -53,7 +55,7 @@ export default function CalendarHeaderDateChevrons() {
       </Button>
 
       <span className="min-w-[140px] text-center font-medium">
-        {format(date, 'MMMM d, yyyy')}
+        {capitalizeFirstLetter(format(date, 'MMMM d, yyyy', {locale: es}))}
       </span>
 
       <Button

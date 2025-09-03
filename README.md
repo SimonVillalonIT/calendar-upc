@@ -58,19 +58,9 @@ Make sure to give this repo a star!
 - 📅 Calendar date selection
 - ⏰ Hour selection (24-hour format)
 
-[From RDSX](https://time.rdsx.dev/)
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 ## Original Inspiriation
 
 [Synergy CRM](https://synergy-platform.vercel.app/calendar)
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=charlietlamb/calendar&type=Date)](https://star-history.com/#charlietlamb/calendar&Date)
 
 ## License
 

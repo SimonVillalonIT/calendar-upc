@@ -10,7 +10,7 @@ export default function CalendarHeaderActionsAdd() {
       onClick={() => setNewEventDialogOpen(true)}
     >
       <Plus />
-      Add Event
+      Agregar Evento
     </Button>
   )
 }

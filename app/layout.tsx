@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'React/Shadcn Calendar',
+  title: 'Calendario UPC',
   description: 'By @charlietlamb',
 }
 

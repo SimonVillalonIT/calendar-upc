@@ -7,7 +7,7 @@ import CalendarEvent from '../../calendar-event'
 export default function CalendarBodyDayContent({ date }: { date: Date }) {
   const { events } = useCalendarContext()
 
-  const dayEvents = events.filter((event) => isSameDay(event.start, date))
+  const dayEvents = events.filter((event) => isSameDay(event.start_date, date))
 
   return (
     <div className="flex flex-col flex-grow">

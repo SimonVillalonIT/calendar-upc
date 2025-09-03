@@ -38,17 +38,17 @@ export default function CalendarBodyMonth() {
   // Filter events to only show those within the current month view
   const visibleEvents = events.filter(
     (event) =>
-      isWithinInterval(event.start, {
+      isWithinInterval(event.start_date, {
         start: calendarStart,
         end: calendarEnd,
       }) ||
-      isWithinInterval(event.end, { start: calendarStart, end: calendarEnd })
+      isWithinInterval(event.end_date, { start: calendarStart, end: calendarEnd })
   )
 
   return (
     <div className="flex flex-col flex-grow overflow-hidden">
       <div className="hidden md:grid grid-cols-7 border-border divide-x divide-border">
-        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
+        {['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb', 'Dom'].map((day) => (
           <div
             key={day}
             className="py-2 text-center text-sm font-medium text-muted-foreground border-b border-border"
@@ -72,7 +72,7 @@ export default function CalendarBodyMonth() {
         >
           {calendarDays.map((day) => {
             const dayEvents = visibleEvents.filter((event) =>
-              isSameDay(event.start, day)
+              isSameDay(event.start_date, day)
             )
             const isToday = isSameDay(day, today)
             const isCurrentMonth = isSameMonth(day, date)

@@ -10,6 +10,14 @@ import { cn } from '@/lib/utils'
 export default function CalendarHeaderActionsMode() {
   const { mode, setMode } = useCalendarContext()
 
+  const translate_mode = (mode: Mode) => {
+    switch (mode) {
+      case 'day': return 'Día'
+      case 'week': return 'Semana'
+      case 'month': return 'Mes'
+    }
+  }
+
   return (
     <LayoutGroup>
       <ToggleGroup
@@ -114,7 +122,7 @@ export default function CalendarHeaderActionsMode() {
                           },
                         }}
                       >
-                        {modeValue.charAt(0).toUpperCase() + modeValue.slice(1)}
+                        {translate_mode(modeValue)}
                       </motion.p>
                     )}
                   </AnimatePresence>

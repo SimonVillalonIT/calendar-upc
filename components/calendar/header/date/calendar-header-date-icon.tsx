@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import { useCalendarContext } from '../../calendar-context'
 export default function CalendarHeaderDateIcon() {
   const { calendarIconIsToday, date: calendarDate } = useCalendarContext()
@@ -6,7 +7,7 @@ export default function CalendarHeaderDateIcon() {
   return (
     <div className="flex size-14 flex-col items-start overflow-hidden rounded-lg border">
       <p className="flex h-6 w-full items-center justify-center bg-primary text-center text-xs font-semibold text-background uppercase">
-        {format(date, 'MMM')}
+        {format(date, 'MMM', {locale: es})}
       </p>
       <p className="flex w-full items-center justify-center text-lg font-bold">
         {format(date, 'dd')}

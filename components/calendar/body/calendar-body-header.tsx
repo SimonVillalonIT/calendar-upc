@@ -1,5 +1,6 @@
 import { format, isSameDay } from 'date-fns'
 import { cn } from '../../../lib/utils'
+import { es } from 'date-fns/locale'
 
 export default function CalendarBodyHeader({
   date,
@@ -18,7 +19,7 @@ export default function CalendarBodyHeader({
           isToday ? 'text-primary' : 'text-muted-foreground'
         )}
       >
-        {format(date, 'EEE')}
+        {format(date, 'EEE', {locale: es})}
       </span>
       {!onlyDay && (
         <span
@@ -27,7 +28,7 @@ export default function CalendarBodyHeader({
             isToday ? 'text-primary font-bold' : 'text-foreground'
           )}
         >
-          {format(date, 'dd')}
+          {format(date, 'dd', {locale: es})}
         </span>
       )}
     </div>

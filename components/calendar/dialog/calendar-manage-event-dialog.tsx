@@ -34,6 +34,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { getColorForPriority } from '@/lib/utils'
 
 const formSchema = z
   .object({
@@ -86,9 +87,9 @@ export default function CalendarManageEventDialog() {
     if (selectedEvent) {
       form.reset({
         title: selectedEvent.title,
-        start: format(selectedEvent.start, "yyyy-MM-dd'T'HH:mm"),
-        end: format(selectedEvent.end, "yyyy-MM-dd'T'HH:mm"),
-        color: selectedEvent.color,
+        start: format(selectedEvent.start_date, "yyyy-MM-dd'T'HH:mm"),
+        end: format(selectedEvent.end_date, "yyyy-MM-dd'T'HH:mm"),
+        color: getColorForPriority(selectedEvent.priority),
       })
     }
   }, [selectedEvent, form])

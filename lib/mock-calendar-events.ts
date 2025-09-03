@@ -1,5 +1,5 @@
-import { CalendarEvent } from '@/components/calendar/calendar-types'
-import { addDays, startOfMonth } from 'date-fns'
+import { CalendarEvent, Profile } from '@/components/calendar/calendar-types'
+import { addDays, startOfMonth, endOfMonth } from 'date-fns' // Importamos endOfMonth
 import { colorOptions } from '@/components/calendar/calendar-tailwind-classes'
 
 const EVENT_TITLES = [
@@ -20,8 +20,9 @@ const EVENT_TITLES = [
   'Team Training',
 ]
 
-// Extract color values from colorOptions
-const EVENT_COLORS = colorOptions.map((color) => color.value)
+// Opciones para la prioridad y el target
+const PRIORITIES = ['Low', 'Medium', 'High']
+const TARGETS = ['Team A', 'Project X', 'Marketing']
 
 function getRandomTime(date: Date): Date {
   const hours = Math.floor(Math.random() * 14) + 8 // 8 AM to 10 PM
@@ -37,26 +38,59 @@ function generateEventDuration(): number {
 export function generateMockEvents(): CalendarEvent[] {
   const events: CalendarEvent[] = []
   const startDate = startOfMonth(new Date())
+  const endDate = endOfMonth(new Date()) // Obtenemos el final del mes
 
-  // Generate 120 events over 3 months
-  for (let i = 0; i < 120; i++) {
-    // Random date between start and end
-    const daysToAdd = Math.floor(Math.random() * 90) // 90 days = ~3 months
+  const daysInMonth = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+
+  // Generamos una cantidad razonable de eventos para el mes
+  const numberOfEvents = 50 
+
+  for (let i = 0; i < numberOfEvents; i++) {
+    // Generar días aleatorios solo dentro del mes actual
+    const daysToAdd = Math.floor(Math.random() * daysInMonth)
     const eventDate = addDays(startDate, daysToAdd)
 
     const startTime = getRandomTime(eventDate)
     const durationMinutes = generateEventDuration()
     const endTime = new Date(startTime.getTime() + durationMinutes * 60000)
 
+    // Datos de ejemplo para el autor
+    const author: Profile = {
+        id: `user-${i + 1}`,
+        name: `User ${i + 1}`,
+        email: `user${i + 1}@example.com`,
+        role: 'admin'
+    }
+
+    // Seleccionamos un valor aleatorio de las prioridades y targets
+    const randomPriority = PRIORITIES[Math.floor(Math.random() * PRIORITIES.length)]
+    const randomTarget = TARGETS[Math.floor(Math.random() * TARGETS.length)]
+
+    // Función para asignar el color (la misma lógica que definimos antes)
+    function getColorForPriority(priority: string) {
+      switch (priority) {
+        case 'High':
+          return 'red'
+        case 'Medium':
+          return 'orange'
+        case 'Low':
+          return 'green'
+        default:
+          return 'blue'
+      }
+    }
+    
     events.push({
       id: `event-${i + 1}`,
       title: EVENT_TITLES[Math.floor(Math.random() * EVENT_TITLES.length)],
-      color: EVENT_COLORS[Math.floor(Math.random() * EVENT_COLORS.length)],
-      start: startTime,
-      end: endTime,
+      priority: randomPriority,
+      start_date: startTime,
+      end_date: endTime,
+      target: randomTarget,
+      author: author,
     })
   }
 
-  // Sort events by start date
-  return events.sort((a, b) => a.start.getTime() - b.start.getTime())
+  // Ordenar eventos por fecha de inicio
+  return events.sort((a, b) => a.start_date.getTime() - b.start_date.getTime())
 }
