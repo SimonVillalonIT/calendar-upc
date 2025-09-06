@@ -3,6 +3,7 @@ import { useCalendarContext } from '@/components/calendar/calendar-context'
 import { format, isSameDay, isSameMonth } from 'date-fns'
 import { cn, getColorForPriority } from '@/lib/utils'
 import { motion, MotionConfig, AnimatePresence } from 'framer-motion'
+import useUser from '@/hooks/use-user'
 
 interface EventPosition {
   left: string
@@ -73,11 +74,12 @@ export default function CalendarEvent({
     useCalendarContext()
   const style = month ? {} : calculateEventPosition(event, events)
 
+  const { user } = useUser()
+
   // Generate a unique key that includes the current month to prevent animation conflicts
   const isEventInCurrentMonth = isSameMonth(event.start_date, date)
-  const animationKey = `${event.id}-${
-    isEventInCurrentMonth ? 'current' : 'adjacent'
-  }`
+  const animationKey = `${event.id}-${isEventInCurrentMonth ? 'current' : 'adjacent'
+    }`
 
   return (
     <MotionConfig reducedMotion="user">
@@ -92,7 +94,7 @@ export default function CalendarEvent({
           onClick={(e) => {
             e.stopPropagation()
             setSelectedEvent(event)
-            setManageEventDialogOpen(true)
+            if (user?.role === 'admin') { setManageEventDialogOpen(true) }
           }}
           initial={{
             opacity: 0,

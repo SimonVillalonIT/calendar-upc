@@ -18,6 +18,8 @@ export type CalendarProps = {
 export type CalendarContextType = CalendarProps & {
   newEventDialogOpen: boolean
   setNewEventDialogOpen: (open: boolean) => void
+  viewEventDialogOpen: boolean
+  setViewEventDialogOpen: (open: boolean) => void
   manageEventDialogOpen: boolean
   setManageEventDialogOpen: (open: boolean) => void
   selectedEvent: CalendarEvent | null

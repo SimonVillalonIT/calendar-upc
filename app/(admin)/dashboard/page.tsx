@@ -1,11 +1,11 @@
 "use client"
 
-import useUser from '@/hooks/user-hook'
+import useUser from '@/hooks/use-user'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
 function Page() {
-  const user = useUser()
+  const {user} = useUser()
   const router = useRouter()
 
   useEffect(() => {

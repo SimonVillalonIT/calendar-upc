@@ -17,17 +17,12 @@ import { AnimatePresence, motion } from 'framer-motion'
 export default function CalendarBodyMonth() {
   const { date, events, setDate, setMode } = useCalendarContext()
 
-  // Get the first day of the month
   const monthStart = startOfMonth(date)
-  // Get the last day of the month
   const monthEnd = endOfMonth(date)
 
-  // Get the first Monday of the first week (may be in previous month)
   const calendarStart = startOfWeek(monthStart, { weekStartsOn: 1 })
-  // Get the last Sunday of the last week (may be in next month)
   const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 })
 
-  // Get all days between start and end
   const calendarDays = eachDayOfInterval({
     start: calendarStart,
     end: calendarEnd,
@@ -35,7 +30,6 @@ export default function CalendarBodyMonth() {
 
   const today = new Date()
 
-  // Filter events to only show those within the current month view
   const visibleEvents = events.filter(
     (event) =>
       isWithinInterval(event.start_date, {
