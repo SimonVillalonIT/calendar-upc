@@ -1,4 +1,4 @@
-import { useCalendarContext } from '../../calendar-context'
+import { useCalendarContext } from '../../../../context/calendar-context'
 import { Calendar } from '@/components/ui/calendar'
 
 export default function CalendarBodyDayCalendar() {

@@ -1,5 +1,5 @@
 import { getColorForPriority } from '@/lib/utils'
-import { useCalendarContext } from '../../calendar-context'
+import { useCalendarContext } from '../../../../context/calendar-context'
 import { isSameDay } from 'date-fns'
 
 export default function CalendarBodyDayEvents() {

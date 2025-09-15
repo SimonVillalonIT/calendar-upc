@@ -32,3 +32,10 @@ export async function updateSession(request: NextRequest) {
 
   return supabaseResponse
 }
+
+// Configuración del matcher para el middleware
+export const config = {
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.svg$|login|auth|assets).*)',
+  ],
+}

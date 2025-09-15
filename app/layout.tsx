@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
-import Header from '@/components/header/header'
+import { UserProvider } from '@/context/user-context'
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -35,15 +35,16 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} `}
     >
       <head />
-      <body className="antialiased font-sans">
+      <body className="antialiased font-sans min-h-screen h-full">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          {children}
+          <UserProvider>
+            {children}
+          </UserProvider>
         </ThemeProvider>
       </body>
     </html>

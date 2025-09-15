@@ -1,9 +1,11 @@
+// src/components/CalendarViewEventDialog.jsx
 import React from 'react'
-import { useCalendarContext } from '../calendar-context'
+import { useCalendarContext } from '../../../context/calendar-context'
 import { format } from 'date-fns'
 import { getColorForPriority } from '@/lib/utils'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Badge, Calendar, Clock, Tag } from 'lucide-react'
+import { Calendar, Clock, Tag, User } from 'lucide-react' // Import the User icon
+import { Badge } from '@/components/ui/badge'
 
 function CalendarViewEventDialog() {
   const { viewEventDialogOpen, setViewEventDialogOpen, selectedEvent, setSelectedEvent } = useCalendarContext()
@@ -51,6 +53,16 @@ function CalendarViewEventDialog() {
               {selectedEvent.priority || 'Normal'}
             </Badge>
           </div>
+          
+          {selectedEvent.author?.name && (
+            <div className="flex items-center space-x-2">
+              <User className="h-4 w-4 text-gray-500" />
+              <span className="text-sm font-medium">
+                Creado por: {selectedEvent.author.name}
+              </span>
+            </div>
+          )}
+
         </div>
       </DialogContent>
     </Dialog>

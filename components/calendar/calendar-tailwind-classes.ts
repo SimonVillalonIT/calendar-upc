@@ -1,6 +1,3 @@
-// this is used to generate all tailwind classes for the calendar
-// if you want to use your own colors, you can override the classes here
-
 export const colorOptions = [
   {
     value: 'blue',

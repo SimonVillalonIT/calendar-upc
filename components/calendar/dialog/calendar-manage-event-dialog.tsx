@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useCalendarContext } from '../calendar-context'
+import { useCalendarContext } from '../../../context/calendar-context'
 import { format } from 'date-fns'
 import { DateTimePicker } from '@/components/form/date-time-picker'
 import {

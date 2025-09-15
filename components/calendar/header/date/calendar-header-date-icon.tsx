@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { useCalendarContext } from '../../calendar-context'
+import { useCalendarContext } from '../../../../context/calendar-context'
 export default function CalendarHeaderDateIcon() {
   const { calendarIconIsToday, date: calendarDate } = useCalendarContext()
   const date = calendarIconIsToday ? new Date() : calendarDate

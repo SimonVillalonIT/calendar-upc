@@ -1,4 +1,4 @@
-import { CalendarEvent, Profile } from '@/components/calendar/calendar-types'
+import { CalendarEvent, Profile } from '@/types/calendar-types'
 import { addDays, startOfMonth, endOfMonth } from 'date-fns' // Importamos endOfMonth
 import { colorOptions } from '@/components/calendar/calendar-tailwind-classes'
 

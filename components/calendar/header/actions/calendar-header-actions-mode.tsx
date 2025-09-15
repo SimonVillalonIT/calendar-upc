@@ -1,8 +1,8 @@
 'use client'
 
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { Mode, calendarModes } from '../../calendar-types'
-import { useCalendarContext } from '../../calendar-context'
+import { Mode, calendarModes } from '../../../../types/calendar-types'
+import { useCalendarContext } from '../../../../context/calendar-context'
 import { calendarModeIconMap } from '../../calendar-mode-icon-map'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 import { cn } from '@/lib/utils'

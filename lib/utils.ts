@@ -29,7 +29,6 @@ export async function getUserRole() {
 export async function logOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect('/');
 }
 
 export function cn(...inputs: ClassValue[]) {

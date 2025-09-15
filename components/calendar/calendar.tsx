@@ -1,4 +1,4 @@
-import type { CalendarProps } from './calendar-types'
+import type { CalendarProps } from '../../types/calendar-types'
 import CalendarHeader from './header/calendar-header'
 import CalendarBody from './body/calendar-body'
 import CalendarHeaderActions from './header/actions/calendar-header-actions'
@@ -16,6 +16,7 @@ export default function Calendar({
   setDate,
   calendarIconIsToday = true,
 }: CalendarProps) {
+
   return (
     <CalendarProvider
       events={events}

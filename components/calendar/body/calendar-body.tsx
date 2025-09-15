@@ -1,4 +1,4 @@
-import { useCalendarContext } from '../calendar-context'
+import { useCalendarContext } from '../../../context/calendar-context'
 import CalendarBodyDay from './day/calendar-body-day'
 import CalendarBodyWeek from './week/calendar-body-week'
 import CalendarBodyMonth from './month/calendar-body-month'
