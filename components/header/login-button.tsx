@@ -12,16 +12,16 @@ export default function LoginButton() {
     }
     return user ? (
         <div className="flex gap-4 items-center">
-            <div className="w-fit flex gap-2 text-gray-600">
+            <div className="w-fit flex gap-2">
                 <UserIcon className="size-7" />
                 <p className="w-fit text-center text-nowrap text-lg">{user?.name || user.email} ({user.role})</p>
             </div>
-            <div onClick={signOut} className="w-fit flex  text-gray-600">
-                <p className="text-gray-600 hover:text-gray-800 select-none cursor-pointer">Cerrar Sesión</p>
+            <div onClick={signOut} className="w-fit flex">
+                <p className="select-none cursor-pointer text-lg">Cerrar Sesión</p>
             </div>
         </div>
     ) : (
-        <Link href="/login" className="text-gray-600 hover:text-gray-800">
+        <Link href="/login" className="select-none">
             Iniciar Sesión
         </Link>
     )
