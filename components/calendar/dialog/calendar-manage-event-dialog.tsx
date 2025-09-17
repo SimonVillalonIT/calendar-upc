@@ -36,6 +36,7 @@ import {
 import { getColorForPriority } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { editEvent } from '@/lib/events'
 
 const formSchema = z
   .object({
@@ -43,8 +44,8 @@ const formSchema = z
     description: z.string().optional(),
     start_date: z.string().datetime(),
     end_date: z.string().datetime(),
-    priority: z.string().optional(),
-    target: z.string().optional(),
+    priority: z.string(),
+    target: z.string(),
   })
   .refine(
     (data) => {
@@ -57,7 +58,7 @@ const formSchema = z
       }
     },
     {
-      message: 'End time must be after start time',
+      message: 'Tiempo de finalización debe ser posterior al tiempo de inicio',
       path: ['end_date'],
     }
   )
@@ -86,18 +87,21 @@ export default function CalendarManageEventDialog() {
 
   useEffect(() => {
     if (selectedEvent) {
+      console.log(selectedEvent)
+      const startDateObject = new Date(selectedEvent.start_date);
+      const endDateObject = new Date(selectedEvent.end_date);
       form.reset({
         title: selectedEvent.title,
         description: selectedEvent.description,
-        start_date: format(selectedEvent.start_date, "yyyy-MM-dd'T'HH:mm"),
-        end_date: format(selectedEvent.end_date, "yyyy-MM-dd'T'HH:mm"),
+        start_date: startDateObject.toISOString(),
+        end_date: endDateObject.toISOString(),
         priority: selectedEvent.priority,
         target: selectedEvent.target,
       })
     }
   }, [selectedEvent, form])
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!selectedEvent) return
 
     const updatedEvent = {
@@ -110,12 +114,21 @@ export default function CalendarManageEventDialog() {
       target: values.target,
     }
 
-    setEvents(
-      events.map((event) =>
-        event.id === selectedEvent.id ? updatedEvent : event
+    try {
+      const error = await editEvent(selectedEvent.id, values)
+
+      if (error) throw new Error(error.message)
+
+      setEvents(
+        events.map((event) =>
+          event.id === selectedEvent.id ? updatedEvent : event
+        )
       )
-    )
-    handleClose()
+      handleClose()
+    } catch (e) {
+      console.log(e)
+      return
+    }
   }
 
   function handleDelete() {

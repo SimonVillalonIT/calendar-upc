@@ -24,6 +24,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Profile } from '../../../types/calendar-types'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { getColorForPriority } from '@/lib/utils'
+import { useUser } from '@/context/user-context'
+import { addEvent } from '@/lib/events'
 
 const formSchema = z
   .object({
@@ -31,8 +33,8 @@ const formSchema = z
     description: z.string().optional(),
     start_date: z.string().datetime(),
     end_date: z.string().datetime(),
-    priority: z.string().optional(),
-    target: z.string().optional(),
+    priority: z.string(),
+    target: z.string(),
   })
   .refine(
     (data) => {
@@ -41,7 +43,7 @@ const formSchema = z
       return end >= start
     },
     {
-      message: 'End time must be after start time',
+      message: 'Tiempo de finalización debe ser posterior al tiempo de inicio',
       path: ['end_date'],
     }
   )
@@ -49,6 +51,9 @@ const formSchema = z
 export default function CalendarNewEventDialog() {
   const { newEventDialogOpen, setNewEventDialogOpen, date, events, setEvents } =
     useCalendarContext()
+
+  const { user } = useUser()
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,7 +67,8 @@ export default function CalendarNewEventDialog() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!user) return null
     const newEvent = {
       id: crypto.randomUUID(),
       title: values.title,
@@ -71,12 +77,20 @@ export default function CalendarNewEventDialog() {
       end_date: new Date(values.end_date),
       priority: values.priority,
       target: values.target,
-      author: { id: '1', email: 'test@test.com', name: 'Test User', role: 'teacher' as Profile['role'] },
+      author: { id: user.id, email: user.email as string, name: user.name, role: user.role as Profile['role'] },
     }
 
-    setEvents([...events, newEvent])
-    setNewEventDialogOpen(false)
-    form.reset()
+    try {
+      const error = await addEvent(values)
+
+      if (error) throw new Error(error.message)
+
+      setEvents([...events, newEvent])
+      setNewEventDialogOpen(false)
+      form.reset()
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
