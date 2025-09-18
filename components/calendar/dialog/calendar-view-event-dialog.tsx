@@ -1,4 +1,3 @@
-// src/components/CalendarViewEventDialog.jsx
 import React from 'react'
 import { useCalendarContext } from '../../../context/calendar-context'
 import { format } from 'date-fns'
@@ -6,6 +5,7 @@ import { getColorForPriority } from '@/lib/utils'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Calendar, Clock, Tag, User } from 'lucide-react' // Import the User icon
 import { Badge } from '@/components/ui/badge'
+import { es } from 'date-fns/locale'
 
 function CalendarViewEventDialog() {
   const { viewEventDialogOpen, setViewEventDialogOpen, selectedEvent, setSelectedEvent } = useCalendarContext()
@@ -19,9 +19,9 @@ function CalendarViewEventDialog() {
     return null
   }
 
-  const startDate = format(selectedEvent.start_date, 'PPPP')
+  const startDate = format(selectedEvent.start_date, 'PPPP', { locale: es })
   const startTime = format(selectedEvent.start_date, 'h:mm a')
-  const endDate = format(selectedEvent.end_date, 'PPPP')
+  const endDate = format(selectedEvent.end_date, 'PPPP', { locale: es })
   const endTime = format(selectedEvent.end_date, 'h:mm a')
   const colorClass = `bg-${getColorForPriority(selectedEvent.priority)}-500 text-${getColorForPriority(selectedEvent.priority)}-50-foreground`
 
@@ -35,17 +35,33 @@ function CalendarViewEventDialog() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="flex items-center space-x-2">
-            <Calendar className="h-4 w-4 text-gray-500" />
-            <span className="text-sm font-medium">
-              {startDate}
-            </span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Clock className="h-4 w-4 text-gray-500" />
-            <span className="text-sm font-medium">
-              {startTime} - {endTime}
-            </span>
+          <div className="space-y-4">
+            <div>
+              <div className="flex items-center space-x-2 mb-1">
+                <Calendar className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                <span className="text-base font-semibold text-gray-800 dark:text-gray-200">
+                  Fecha de Inicio
+                </span>
+              </div>
+              <div className="flex items-center space-x-2 pl-7">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {startDate} - {startTime}
+                </span>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center space-x-2 mb-1">
+                <Calendar className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                <span className="text-base font-semibold text-gray-800 dark:text-gray-200">
+                  Fecha de Finalización
+                </span>
+              </div>
+              <div className="flex items-center space-x-2 pl-7">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {endDate} - {endTime}
+                </span>
+              </div>
+            </div>
           </div>
           <div className="flex items-center space-x-2">
             <Tag className="h-4 w-4 text-gray-500" />
@@ -53,7 +69,7 @@ function CalendarViewEventDialog() {
               {selectedEvent.priority || 'Normal'}
             </Badge>
           </div>
-          
+
           {selectedEvent.author?.name && (
             <div className="flex items-center space-x-2">
               <User className="h-4 w-4 text-gray-500" />

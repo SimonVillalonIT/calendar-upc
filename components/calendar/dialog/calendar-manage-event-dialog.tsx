@@ -20,7 +20,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useCalendarContext } from '../../../context/calendar-context'
-import { format } from 'date-fns'
 import { DateTimePicker } from '@/components/form/date-time-picker'
 import {
   AlertDialog,
@@ -87,7 +86,6 @@ export default function CalendarManageEventDialog() {
 
   useEffect(() => {
     if (selectedEvent) {
-      console.log(selectedEvent)
       const startDateObject = new Date(selectedEvent.start_date);
       const endDateObject = new Date(selectedEvent.end_date);
       form.reset({

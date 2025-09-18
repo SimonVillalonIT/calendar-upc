@@ -114,7 +114,6 @@ export default function CalendarNewEventDialog() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="description"
@@ -128,7 +127,6 @@ export default function CalendarNewEventDialog() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="start_date"
@@ -142,7 +140,6 @@ export default function CalendarNewEventDialog() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="end_date"
@@ -156,7 +153,6 @@ export default function CalendarNewEventDialog() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="priority"
@@ -179,7 +175,6 @@ export default function CalendarNewEventDialog() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="target"
@@ -202,7 +197,6 @@ export default function CalendarNewEventDialog() {
                 </FormItem>
               )}
             />
-
             <div className="flex justify-end">
               <Button type="submit">Crear evento</Button>
             </div>
