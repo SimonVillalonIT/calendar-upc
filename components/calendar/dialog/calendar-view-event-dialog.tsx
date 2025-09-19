@@ -1,29 +1,54 @@
-import React from 'react'
-import { useCalendarContext } from '../../../context/calendar-context'
-import { format } from 'date-fns'
-import { getColorForPriority } from '@/lib/utils'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Calendar, Clock, Tag, User } from 'lucide-react' // Import the User icon
-import { Badge } from '@/components/ui/badge'
-import { es } from 'date-fns/locale'
+import React from 'react';
+import { useCalendarContext } from '../../../context/calendar-context';
+import { format } from 'date-fns';
+import { getColorForPriority } from '@/lib/utils';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Calendar, Tag, User, Pencil, Trash } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { es } from 'date-fns/locale';
+import { Button } from '@/components/ui/button';
 
 function CalendarViewEventDialog() {
-  const { viewEventDialogOpen, setViewEventDialogOpen, selectedEvent, setSelectedEvent } = useCalendarContext()
-
-  function handleClose() {
-    setViewEventDialogOpen(false)
-    setSelectedEvent(null)
-  }
+  const { viewEventDialogOpen, setViewEventDialogOpen, setManageEventDialogOpen, selectedEvent, setSelectedEvent, events, setEvents } = useCalendarContext();
 
   if (!selectedEvent) {
-    return null
+    return null;
   }
 
-  const startDate = format(selectedEvent.start_date, 'PPPP', { locale: es })
-  const startTime = format(selectedEvent.start_date, 'h:mm a')
-  const endDate = format(selectedEvent.end_date, 'PPPP', { locale: es })
-  const endTime = format(selectedEvent.end_date, 'h:mm a')
-  const colorClass = `bg-${getColorForPriority(selectedEvent.priority)}-500 text-${getColorForPriority(selectedEvent.priority)}-50-foreground`
+  function handleDelete() {
+    if (!selectedEvent) return;
+    setEvents(events.filter((event) => event.id !== selectedEvent.id));
+    handleClose();
+  }
+
+  const startDate = format(selectedEvent.start_date, 'PPPP', { locale: es });
+  const startTime = format(selectedEvent.start_date, 'h:mm a');
+  const endDate = format(selectedEvent.end_date, 'PPPP', { locale: es });
+  const endTime = format(selectedEvent.end_date, 'h:mm a');
+  const colorClass = `bg-${getColorForPriority(selectedEvent.priority)}-500 text-${getColorForPriority(selectedEvent.priority)}-50-foreground`;
+
+  function handleClose() {
+    setViewEventDialogOpen(false);
+    setSelectedEvent(null);
+  }
 
   return (
     <Dialog open={viewEventDialogOpen} onOpenChange={handleClose}>
@@ -78,11 +103,40 @@ function CalendarViewEventDialog() {
               </span>
             </div>
           )}
-
         </div>
+        <DialogFooter className="flex justify-between items-center">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="flex items-center gap-2">
+                <Trash className="h-4 w-4" />
+                Eliminar
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="z-50">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Borrar evento</AlertDialogTitle>
+                <AlertDialogDescription>
+                  ¿Seguro que quieres borrar este evento? Esta acción no puede deshacerse.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete}>
+                  Borrar
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          <Button onClick={() => {
+            setManageEventDialogOpen(true)
+          }} variant="outline" className="flex items-center gap-2">
+            <Pencil className="h-4 w-4" />
+            Editar
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
-export default CalendarViewEventDialog
+export default CalendarViewEventDialog;

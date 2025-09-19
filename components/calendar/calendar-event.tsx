@@ -93,9 +93,7 @@ export default function CalendarEvent({
           onClick={(e) => {
             e.stopPropagation()
             setSelectedEvent(event)
-            if (user?.role === 'admin') { setManageEventDialogOpen(true) } else{
               setViewEventDialogOpen(true)
-            }
           }}
           initial={{
             opacity: 0,
