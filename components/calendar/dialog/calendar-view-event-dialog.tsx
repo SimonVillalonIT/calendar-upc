@@ -25,9 +25,11 @@ import { Calendar, Tag, User, Pencil, Trash } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
+import { useUser } from '@/context/user-context';
 
 function CalendarViewEventDialog() {
   const { viewEventDialogOpen, setViewEventDialogOpen, setManageEventDialogOpen, selectedEvent, setSelectedEvent, events, setEvents } = useCalendarContext();
+  const { user } = useUser()
 
   if (!selectedEvent) {
     return null;
@@ -104,36 +106,39 @@ function CalendarViewEventDialog() {
             </div>
           )}
         </div>
-        <DialogFooter className="flex justify-between items-center">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" className="flex items-center gap-2">
-                <Trash className="h-4 w-4" />
-                Eliminar
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent className="z-50">
-              <AlertDialogHeader>
-                <AlertDialogTitle>Borrar evento</AlertDialogTitle>
-                <AlertDialogDescription>
-                  ¿Seguro que quieres borrar este evento? Esta acción no puede deshacerse.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete}>
-                  Borrar
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <Button onClick={() => {
-            setManageEventDialogOpen(true)
-          }} variant="outline" className="flex items-center gap-2">
-            <Pencil className="h-4 w-4" />
-            Editar
-          </Button>
-        </DialogFooter>
+        {user?.role === "admin" || user?.id === selectedEvent.author.id ?
+          <DialogFooter className="flex justify-between items-center">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" className="flex items-center gap-2">
+                  <Trash className="h-4 w-4" />
+                  Eliminar
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="z-50">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Borrar evento</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    ¿Seguro que quieres borrar este evento? Esta acción no puede deshacerse.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete}>
+                    Borrar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <Button onClick={() => {
+              setManageEventDialogOpen(true)
+            }} variant="outline" className="flex items-center gap-2">
+              <Pencil className="h-4 w-4" />
+              Editar
+            </Button>
+          </DialogFooter>
+          : null}
+
       </DialogContent>
     </Dialog>
   );
