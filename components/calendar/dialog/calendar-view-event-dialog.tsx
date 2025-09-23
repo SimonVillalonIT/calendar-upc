@@ -26,6 +26,8 @@ import { Badge } from '@/components/ui/badge';
 import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/context/user-context';
+import { deleteEvent } from '@/lib/events';
+import { toast } from 'sonner';
 
 function CalendarViewEventDialog() {
   const { viewEventDialogOpen, setViewEventDialogOpen, setManageEventDialogOpen, selectedEvent, setSelectedEvent, events, setEvents } = useCalendarContext();
@@ -34,11 +36,31 @@ function CalendarViewEventDialog() {
   if (!selectedEvent) {
     return null;
   }
+  function handleClose() {
+    setViewEventDialogOpen(false);
+    setSelectedEvent(null);
+  }
 
-  function handleDelete() {
+  async function handleDelete() {
     if (!selectedEvent) return;
-    setEvents(events.filter((event) => event.id !== selectedEvent.id));
-    handleClose();
+
+    try {
+      // const error = await deleteEvent(selectedEvent.id);
+
+      // if (error) {
+      //   throw new Error(error.message);
+      // }
+
+      // setEvents(events.filter((event) => event.id !== selectedEvent.id));
+      handleClose();
+      toast.promise(deleteEvent(selectedEvent.id), {
+        loading: 'Eliminando evento...',
+        success: 'Evento eliminado',
+        error: (err) => `Error al eliminar el evento: ${err.message}`,
+      });
+    } catch (error) {
+      console.log("Error deleting event:", error);
+    }
   }
 
   const startDate = format(selectedEvent.start_date, 'PPPP', { locale: es });
@@ -46,11 +68,6 @@ function CalendarViewEventDialog() {
   const endDate = format(selectedEvent.end_date, 'PPPP', { locale: es });
   const endTime = format(selectedEvent.end_date, 'h:mm a');
   const colorClass = `bg-${getColorForPriority(selectedEvent.priority)}-500 text-${getColorForPriority(selectedEvent.priority)}-50-foreground`;
-
-  function handleClose() {
-    setViewEventDialogOpen(false);
-    setSelectedEvent(null);
-  }
 
   return (
     <Dialog open={viewEventDialogOpen} onOpenChange={handleClose}>

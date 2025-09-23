@@ -54,3 +54,9 @@ export async function editEvent(id:string, values: {
 
     return error
 }
+
+export async function deleteEvent(id: string) {
+    const { error } = await supabase.from("events").delete().eq("id", id)
+
+    return error
+}
