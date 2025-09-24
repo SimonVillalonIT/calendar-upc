@@ -3,7 +3,6 @@ import { useCalendarContext } from '@/context/calendar-context'
 import { format, isSameDay, isSameMonth } from 'date-fns'
 import { cn, getColorForPriority } from '@/lib/utils'
 import { motion, MotionConfig, AnimatePresence } from 'framer-motion'
-import { useUser } from '@/context/user-context'
 
 interface EventPosition {
   left: string
@@ -38,11 +37,15 @@ function calculateEventPosition(
   const width = `${100 / (overlappingEvents.length + 1)}%`
   const left = `${(position * 100) / (overlappingEvents.length + 1)}%`
 
-  const startHour = event.start_date.getHours()
-  const startMinutes = event.start_date.getMinutes()
 
-  let endHour = event.end_date.getHours()
-  let endMinutes = event.end_date.getMinutes()
+  const startDate = new Date(event.start_date)
+  const endDate = new Date(event.end_date)
+
+  const startHour = startDate.getHours()
+  const startMinutes = startDate.getMinutes()
+
+  let endHour = endDate.getHours()
+  let endMinutes = endDate.getMinutes()
 
   if (!isSameDay(event.start_date, event.end_date)) {
     endHour = 23
@@ -71,8 +74,7 @@ export default function CalendarEvent({
   className?: string
 }) {
 
-  const { user } = useUser()
-  const { events, setSelectedEvent, setManageEventDialogOpen, setViewEventDialogOpen, date } =
+  const { events, setSelectedEvent,  setViewEventDialogOpen, date } =
     useCalendarContext()
   const style = month ? {} : calculateEventPosition(event, events)
 

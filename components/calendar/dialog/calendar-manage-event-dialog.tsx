@@ -28,7 +28,7 @@ import { editEvent } from '@/lib/events'
 
 const formSchema = z
   .object({
-    title: z.string().min(1, 'Title is required'),
+    title: z.string().min(1, 'El titulo es obligatorio'),
     description: z.string().optional(),
     start_date: z.string().datetime(),
     end_date: z.string().datetime(),

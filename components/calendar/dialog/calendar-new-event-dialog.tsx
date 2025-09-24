@@ -29,7 +29,7 @@ import { addEvent } from '@/lib/events'
 
 const formSchema = z
   .object({
-    title: z.string().min(1, 'Title is required'),
+    title: z.string().min(1, 'El título es obligatorio'),
     description: z.string().optional(),
     start_date: z.string().datetime(),
     end_date: z.string().datetime(),
@@ -54,14 +54,15 @@ export default function CalendarNewEventDialog() {
 
   const { user } = useUser()
 
+  const formatedDate = new Date(date);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
       description: '',
-      start_date: format(date, "yyyy-MM-dd'T'HH:mm"),
-      end_date: format(date, "yyyy-MM-dd'T'HH:mm"),
+      start_date: formatedDate.toISOString(),
+      end_date: formatedDate.toISOString(),
       priority: '',
       target: '',
     },

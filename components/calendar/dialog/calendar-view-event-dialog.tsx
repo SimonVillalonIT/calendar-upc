@@ -44,6 +44,9 @@ function CalendarViewEventDialog() {
   async function handleDelete() {
     if (!selectedEvent) return;
 
+      toast("Hola estoy en desarrollo, pronto podrás eliminar eventos 😁",{className: "z-[999]"})
+      console.log("Intentando eliminar evento:", selectedEvent.id);
+
     try {
       // const error = await deleteEvent(selectedEvent.id);
 
@@ -52,12 +55,12 @@ function CalendarViewEventDialog() {
       // }
 
       // setEvents(events.filter((event) => event.id !== selectedEvent.id));
-      handleClose();
-      toast.promise(deleteEvent(selectedEvent.id), {
-        loading: 'Eliminando evento...',
-        success: 'Evento eliminado',
-        error: (err) => `Error al eliminar el evento: ${err.message}`,
-      });
+      // handleClose();
+      // toast.promise(deleteEvent(selectedEvent.id), {
+      //   loading: 'Eliminando evento...',
+      //   success: 'Evento eliminado',
+      //   error: (err) => `Error al eliminar el evento: ${err.message}`,
+      // });
     } catch (error) {
       console.log("Error deleting event:", error);
     }
