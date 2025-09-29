@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Calendar from './calendar/calendar'
 import { CalendarEvent, Mode } from '../types/calendar-types'
 import { getEvents } from '@/lib/events'
+import { useUser } from '@/context/user-context'
 
 export default function CalendarDemo() {
   const [events, setEvents] = useState<CalendarEvent[]>([])
@@ -11,11 +12,13 @@ export default function CalendarDemo() {
   const [date, setDate] = useState<Date>(new Date())
   const [loading, setLoading] = useState(false)
 
+  const {user} = useUser()
+
   useEffect(() => {
     async function fetchEvents() {
       setLoading(true)
       try {
-        const { data, error } = await getEvents()
+        const { data, error } = await getEvents(user)
         if (data) {
           setEvents(data)
         } else {

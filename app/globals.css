@@ -111,3 +111,7 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+#sonner-root * {
+  all: revert;
+}
