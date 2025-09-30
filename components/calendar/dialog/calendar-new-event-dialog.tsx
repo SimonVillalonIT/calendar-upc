@@ -18,7 +18,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useCalendarContext } from '../../../context/calendar-context'
-import { format } from 'date-fns'
 import { DateTimePicker } from '@/components/form/date-time-picker'
 import { Textarea } from '@/components/ui/textarea'
 import { Profile } from '../../../types/calendar-types'

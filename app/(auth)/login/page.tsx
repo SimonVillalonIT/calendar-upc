@@ -1,9 +1,8 @@
-// src/app/login/page.tsx
 "use client"
 
 import { useRouter } from "next/navigation"
 import { useTransition, useState } from "react"
-import { login } from "./actions" // Your Server Action
+import { login } from "./actions" 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"

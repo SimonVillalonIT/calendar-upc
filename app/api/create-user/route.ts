@@ -24,7 +24,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: userError.message }, { status: 400 });
     }
 
-    // Insert the user's role and name into the profiles table.
     const { error: profileError } = await supabaseAdmin
       .from('profiles')
       .insert({ id: user?.id, role, name, email });

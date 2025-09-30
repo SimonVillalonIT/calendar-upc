@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
 import { UserProvider } from '@/context/user-context'
+import Header from '@/components/header/header'
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -43,6 +44,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <UserProvider>
+            <Header />
             {children}
           </UserProvider>
         </ThemeProvider>
