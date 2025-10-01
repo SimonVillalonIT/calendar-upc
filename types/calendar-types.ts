@@ -2,7 +2,7 @@ export type Profile = {
   id: string
   email: string | null
   name: string | null
-  role: "admin" | "teacher"  
+  role: number 
 }
 
 export type CalendarProps = {
@@ -29,9 +29,9 @@ export type CalendarContextType = CalendarProps & {
 export type CalendarEvent = {
   id: string
   title: string
-  description?: string
-  priority?: string
-  target?: string
+  description: string
+  priority: number
+  target: number
   start_date: Date
   end_date: Date
   author: Profile 

@@ -7,14 +7,13 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
-type Role = 'student' | 'teacher' | 'admin';
+import { TARGETS } from "@/lib/constants"
 
 export default function RegisterPage() {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState("")
-  const [role, setRole] = useState<Role>('student') // Estado para el campo 'role'
+  const [role, setRole] = useState<number>(2) // Estado para el campo 'role'
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Previene el envío por defecto de la etiqueta <form>
@@ -25,7 +24,6 @@ export default function RegisterPage() {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const name = formData.get("name") as string;
-    // 'role' ya lo tenemos en el estado
 
     if (!email || !password || !name) {
       setError("Por favor, completa todos los campos.");
@@ -67,34 +65,29 @@ export default function RegisterPage() {
             Ingresa tus datos y selecciona tu rol.
           </CardDescription>
         </CardHeader>
-        {/* Cambiamos a onSubmit y usamos fetch ya que tu API es una ruta */}
         <form onSubmit={handleSubmit}> 
           <CardContent className="grid gap-4">
-            {/* Campo Nombre */}
             <div className="grid gap-2">
               <Label htmlFor="name">Nombre Completo</Label>
               <Input id="name" name="name" type="text" placeholder="Juan Pérez" required />
             </div>
-            {/* Campo Email */}
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" name="email" type="email" placeholder="email@ejemplo.com" required />
             </div>
-            {/* Campo Contraseña */}
             <div className="grid gap-2">
               <Label htmlFor="password">Contraseña</Label>
               <Input id="password" name="password" type="password" required />
             </div>
-            {/* Campo Rol (Select) */}
             <div className="grid gap-2">
               <Label htmlFor="role">Rol</Label>
-              <Select name="role" value={role} onValueChange={(value: Role) => setRole(value)}>
+              <Select name="role" value={role.toString()} onValueChange={(value: string) => setRole(parseInt(value))}>
                 <SelectTrigger id="role">
                   <SelectValue placeholder="Selecciona un rol" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="teacher">Profesor</SelectItem>
-                  <SelectItem value="admin">Administrador</SelectItem> 
+                  <SelectItem value="1">{TARGETS[1]}</SelectItem>
+                  <SelectItem value="2">{TARGETS[2]}</SelectItem> 
                 </SelectContent>
               </Select>
             </div>

@@ -20,20 +20,20 @@ import { Button } from '@/components/ui/button'
 import { useCalendarContext } from '../../../context/calendar-context'
 import { DateTimePicker } from '@/components/form/date-time-picker'
 import { Textarea } from '@/components/ui/textarea'
-import { Profile } from '../../../types/calendar-types'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { getColorForPriority } from '@/lib/utils'
 import { useUser } from '@/context/user-context'
 import { addEvent } from '@/lib/events'
+import { PRIORITIES, TARGETS } from '@/lib/constants'
 
 const formSchema = z
   .object({
-    title: z.string().min(1, 'El título es obligatorio'),
-    description: z.string().optional(),
+    title: z.string().min(1, 'El titulo es obligatorio'),
+    description: z.string().min(1, 'La descripción es obligatoria'),
     start_date: z.string().datetime(),
     end_date: z.string().datetime(),
-    priority: z.string(),
-    target: z.string(),
+    priority: z.number().min(1, 'El objetivo es invalido').max(3, 'El objetivo es inválido'),
+    target: z.number().min(1, 'El objetivo es invalido').max(3, 'El objetivo es inválido'),
   })
   .refine(
     (data) => {
@@ -48,22 +48,20 @@ const formSchema = z
   )
 
 export default function CalendarNewEventDialog() {
-  const { newEventDialogOpen, setNewEventDialogOpen, date, events, setEvents } =
+  const { newEventDialogOpen, setNewEventDialogOpen, events, setEvents } =
     useCalendarContext()
 
   const { user } = useUser()
-
-  const formatedDate = new Date(date);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
       description: '',
-      start_date: formatedDate.toISOString(),
-      end_date: formatedDate.toISOString(),
-      priority: '',
-      target: '',
+      start_date: '',
+      end_date: '',
+      priority: 0,
+      target: 0,
     },
   })
 
@@ -77,7 +75,7 @@ export default function CalendarNewEventDialog() {
       end_date: new Date(values.end_date),
       priority: values.priority,
       target: values.target,
-      author: { id: user.id, email: user.email as string, name: user.name, role: user.role as Profile['role'] },
+      author: { id: user.id, email: user.email as string, name: user.name, role: user.role},
     }
 
     try {
@@ -159,16 +157,19 @@ export default function CalendarNewEventDialog() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-bold">Prioridad</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))} // 👈 CONVERT STRING TO NUMBER
+                    value={String(field.value)} // 👈 CONVERT NUMBER TO STRING
+                  >
                     <FormControl className={`text-${getColorForPriority(field.value)}-500`}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona prioridad" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem className="text-red-500 cursor-pointer focus:text-red-700" value="High">Prioritario</SelectItem>
-                      <SelectItem className="text-yellow-500 cursor-pointer focus:text-yellow-700" value="Medium">Importante</SelectItem>
-                      <SelectItem className="text-blue-500 cursor-pointer focus:text-blue-700" value="Low">Normal</SelectItem>
+                      <SelectItem className="text-red-500 cursor-pointer focus:text-red-700" value="1">{PRIORITIES[1]}</SelectItem> 
+                      <SelectItem className="text-yellow-500 cursor-pointer focus:text-yellow-700" value="2">{PRIORITIES[2]}</SelectItem> 
+                      <SelectItem className="text-blue-500 cursor-pointer focus:text-blue-700" value="3">{PRIORITIES[3]}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -181,16 +182,19 @@ export default function CalendarNewEventDialog() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-bold">Visibilidad</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}  
+                    value={String(field.value)}  
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona quién podrá verlo" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="student">Alumnos</SelectItem>
-                      <SelectItem value="teacher">Profesores</SelectItem>
-                      <SelectItem value="admin">Administración</SelectItem>
+                      <SelectItem value="1">{TARGETS[1]}</SelectItem> 
+                      <SelectItem value="2">{TARGETS[2]}</SelectItem> 
+                      <SelectItem value="3">{TARGETS[3]}</SelectItem> 
                     </SelectContent>
                   </Select>
                   <FormMessage />

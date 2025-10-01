@@ -35,16 +35,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getColorForPriority(priority?: string) {
+export function getColorForPriority(priority: number) {
   switch (priority) {
-    case 'High':
+    case 1:
       return 'red'
-    case 'Medium':
+    case 2:
+      return 'blue'
+    case 3:
       return 'orange'
-    case 'Low':
-      return 'blue'
     default:
-      return 'blue'
+      return 'yellow'
   }
 }
 

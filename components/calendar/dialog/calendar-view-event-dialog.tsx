@@ -118,7 +118,7 @@ function CalendarViewEventDialog() {
             </div>
           )}
         </div>
-        {user?.role === "admin" || user?.id === selectedEvent.author.id ?
+        {user?.role === 1 || user?.id === selectedEvent.author.id ?
           <DialogFooter className="flex justify-between items-center">
             <AlertDialog>
               <AlertDialogTrigger asChild>

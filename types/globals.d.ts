@@ -1,15 +1,13 @@
 import { User } from "@supabase/supabase-js";
 
-type Role = "admin" | "teacher"
-
 interface UserWithRole extends User {
-    role: Role
+    role: number
     name: string
 }
 
 interface EventForm {
   id: string
-  createdBy: { id: string, email: string, name: string, role: Role }
+  createdBy: { id: string, email: string, name: string, role: number }
   title: string
   description: string
   priority: string

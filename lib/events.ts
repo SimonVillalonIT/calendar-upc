@@ -1,19 +1,18 @@
 import { CalendarEvent } from "@/types/calendar-types";
 import { createClient } from "./supabase/client";
 import { PostgrestError } from "@supabase/supabase-js";
-import { Database } from "@/database.types";
 import { UserWithRole } from "@/types/globals";
 
 const supabase = createClient()
 
 export async function getEvents(user: UserWithRole | null): Promise<{ data: CalendarEvent[] | null, error: PostgrestError | null }> {
 
-    if (user && user.role === 'teacher') {
+    if (user && user.role === 2) {
         // @ts-expect-error: RPC function type not in generated types
         const { data, error } = await supabase.rpc("get_events_for_teacher_and_students", {_teacher_id: user.id}) as Database["public"]["Functions"]["get_events_with_author"]
         return { data: data as CalendarEvent[], error }
     }
-     if (user && user.role === 'admin') {
+     if (user && user.role === 1) {
         // @ts-expect-error: RPC function type not in generated types
         const { data, error } = await supabase.rpc("get_events_with_author") as Database["public"]["Functions"]["get_events_with_author"]
         return { data: data as CalendarEvent[], error }
@@ -27,9 +26,9 @@ export async function addEvent(values: {
     end_date: string;
     start_date: string;
     title: string;
-    description?: string | undefined;
-    priority?: string | undefined;
-    target?: string | undefined;
+    priority: number,
+    target: number,
+    description: string;
 }) {
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -56,9 +55,9 @@ export async function editEvent(id: string, values: {
     end_date: string;
     start_date: string;
     title: string;
+    priority: number 
+    target: number
     description?: string | undefined;
-    priority?: string | undefined;
-    target?: string | undefined;
 }) {
 
     const { error } = await supabase.from("events").update(values).eq("id", id)

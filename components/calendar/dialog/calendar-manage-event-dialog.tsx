@@ -25,15 +25,16 @@ import { getColorForPriority } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { editEvent } from '@/lib/events'
+import { PRIORITIES, TARGETS } from '@/lib/constants'
 
 const formSchema = z
   .object({
     title: z.string().min(1, 'El titulo es obligatorio'),
-    description: z.string().optional(),
+    description: z.string().min(1, 'La descripción es obligatoria'),
     start_date: z.string().datetime(),
     end_date: z.string().datetime(),
-    priority: z.string(),
-    target: z.string(),
+    priority: z.number().min(1, 'El objetivo es invalido').max(3, 'El objetivo es inválido'),
+    target: z.number().min(1, 'El objetivo es invalido').max(3, 'El objetivo es inválido'),
   })
   .refine(
     (data) => {
@@ -68,8 +69,8 @@ export default function CalendarManageEventDialog() {
       description: '',
       start_date: '',
       end_date: '',
-      priority: '',
-      target: '',
+      priority: 0,
+      target: 0,
     },
   })
 
@@ -187,55 +188,58 @@ export default function CalendarManageEventDialog() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="priority"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-bold">Prioridad</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={String(field.value)} 
+                  >
                     <FormControl className={`text-${getColorForPriority(field.value)}-500`}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona prioridad" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem className="text-red-500 cursor-pointer focus:text-red-700" value="High">Prioritario</SelectItem>
-                      <SelectItem className="text-yellow-500 cursor-pointer focus:text-yellow-700" value="Medium">Importante</SelectItem>
-                      <SelectItem className="text-blue-500 cursor-pointer focus:text-blue-700" value="Low">Normal</SelectItem>
+                      <SelectItem className="text-red-500 cursor-pointer focus:text-red-700" value="1">{PRIORITIES[1]}</SelectItem> 
+                      <SelectItem className="text-yellow-500 cursor-pointer focus:text-yellow-700" value="2">{PRIORITIES[2]}</SelectItem> 
+                      <SelectItem className="text-blue-500 cursor-pointer focus:text-blue-700" value="3">{PRIORITIES[3]}</SelectItem> 
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="target"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-bold">Visibilidad</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))} 
+                    value={String(field.value)} 
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona quién podrá verlo" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="student">Alumnos</SelectItem>
-                      <SelectItem value="teacher">Profesores</SelectItem>
-                      <SelectItem value="admin">Administración</SelectItem>
+                      <SelectItem value="1">{TARGETS[1]}</SelectItem> 
+                      <SelectItem value="2">{TARGETS[2]}</SelectItem> 
+                      <SelectItem value="3">{TARGETS[3]}</SelectItem> 
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <DialogFooter className="flex justify-between gap-2">
-              
+
               <Button type="submit">Actualizar evento</Button>
             </DialogFooter>
           </form>

@@ -9,11 +9,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     useEffect(() => {
         if (isLoading) return
-        if (user?.role !== 'admin') {
+        if (user?.role !== 1) {
             console.log("true")
             router.push('/')
         }
-    }, [user, router])
+    }, [user, router, isLoading])
 
     if (isLoading) return <div>Loading...</div>
 
