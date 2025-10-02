@@ -12,10 +12,11 @@ export default function CalendarDemo() {
   const [date, setDate] = useState<Date>(new Date())
   const [loading, setLoading] = useState(false)
 
-  const {user} = useUser()
+  const { user, isLoading } = useUser()
 
   useEffect(() => {
     async function fetchEvents() {
+      if (isLoading) return
       setLoading(true)
       try {
         const { data, error } = await getEvents(user)

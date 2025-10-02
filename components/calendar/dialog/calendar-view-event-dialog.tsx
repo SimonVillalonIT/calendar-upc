@@ -27,6 +27,7 @@ import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/context/user-context';
 import { deleteEvent } from '@/lib/events';
+import { PRIORITIES } from '@/lib/constants';
 
 function CalendarViewEventDialog() {
   const { viewEventDialogOpen, setViewEventDialogOpen, setManageEventDialogOpen, selectedEvent, setSelectedEvent, events, setEvents } = useCalendarContext();
@@ -105,7 +106,7 @@ function CalendarViewEventDialog() {
           <div className="flex items-center space-x-2">
             <Tag className="h-4 w-4 text-gray-500" />
             <Badge className={colorClass}>
-              {selectedEvent.priority || 'Normal'}
+              {PRIORITIES[selectedEvent.priority as unknown as keyof typeof PRIORITIES] || 'Normal'}
             </Badge>
           </div>
 

@@ -58,8 +58,8 @@ export default function CalendarNewEventDialog() {
     defaultValues: {
       title: '',
       description: '',
-      start_date: '',
-      end_date: '',
+      start_date: new Date().toISOString(),
+      end_date: new Date().toISOString(),
       priority: 0,
       target: 0,
     },
