@@ -11,10 +11,16 @@ export async function POST(req: Request) {
     const { email, password, role, name } = await req.json();
 
     if (!email || !password || !role) {
-      return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing required fields.' },
+        { status: 400 }
+      );
     }
 
-    const { data: { user }, error: userError } = await supabaseAdmin.auth.admin.createUser({
+    const {
+      data: { user },
+      error: userError,
+    } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
       email_confirm: true,
@@ -32,11 +38,16 @@ export async function POST(req: Request) {
       if (user && user.id) {
         await supabaseAdmin.auth.admin.deleteUser(user.id);
       }
-      return NextResponse.json({ error: profileError.message }, { status: 500 });
+      return NextResponse.json(
+        { error: profileError.message },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({ message: 'User created successfully.', userId: user?.id }, { status: 200 });
-
+    return NextResponse.json(
+      { message: 'User created successfully.', userId: user?.id },
+      { status: 200 }
+    );
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json({ error: err.message }, { status: 500 });

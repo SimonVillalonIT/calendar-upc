@@ -1,12 +1,14 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import { createClient } from './supabase/client';
 import { redirect } from 'next/navigation';
-import { UserWithRole } from "@/types/globals";
+import { UserWithRole } from '@/types/globals';
 
 export async function getUserRole() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     redirect('/');
@@ -20,7 +22,7 @@ export async function getUserRole() {
 
   if (!profile) {
     console.error('Profile not found for user:', user.id);
-    redirect('/error'); 
+    redirect('/error');
   }
 
   return { ...user, role: profile.role, name: profile.name } as UserWithRole;
@@ -32,23 +34,23 @@ export async function logOut() {
 }
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function getColorForPriority(priority: number) {
   switch (priority) {
     case 1:
-      return 'red'
+      return 'red';
     case 2:
-      return 'blue'
+      return 'blue';
     case 3:
-      return 'orange'
+      return 'orange';
     default:
-      return 'yellow'
+      return 'yellow';
   }
 }
 
 export function capitalizeFirstLetter(text: string): string {
-  if (!text) return ''
-  return text.charAt(0).toUpperCase() + text.slice(1)
+  if (!text) return '';
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }

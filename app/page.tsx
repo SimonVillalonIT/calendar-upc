@@ -1,41 +1,43 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { CalendarEvent, Mode } from '../types/calendar-types'
-import { getEvents } from '@/lib/events'
-import { useUser } from '@/context/user-context'
-import Calendar from '@/components/calendar/calendar'
+import { useEffect, useState } from 'react';
+import { CalendarEvent, Mode } from '../types/calendar-types';
+import { getEvents } from '@/lib/events';
+import { useUser } from '@/context/user-context';
+import Calendar from '@/components/calendar/calendar';
 
 export default function CalendarDemo() {
-  const [events, setEvents] = useState<CalendarEvent[]>([])
-  const [mode, setMode] = useState<Mode>('month')
-  const [date, setDate] = useState<Date>(new Date())
-  const [loading, setLoading] = useState(false)
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [mode, setMode] = useState<Mode>('month');
+  const [date, setDate] = useState<Date>(new Date());
+  const [loading, setLoading] = useState(false);
 
-  const { user, isLoading } = useUser()
+  const { user, isLoading } = useUser();
 
   useEffect(() => {
     async function fetchEvents() {
-      if (isLoading) return
-      setLoading(true)
+      if (isLoading) return;
+      setLoading(true);
       try {
-        const { data, error } = await getEvents(user)
+        const { data, error } = await getEvents(user);
         if (data) {
-          setEvents(data)
+          setEvents(data);
         } else {
-          console.log(error)
+          console.log(error);
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    fetchEvents()
-  }, [user])
+    fetchEvents();
+  }, [user, isLoading]);
 
-  return loading ? "Loading ..." : (
+  return loading ? (
+    'Loading ...'
+  ) : (
     <Calendar
       events={events}
       setEvents={setEvents}
@@ -44,5 +46,5 @@ export default function CalendarDemo() {
       date={date}
       setDate={setDate}
     />
-  )
+  );
 }

@@ -1,21 +1,21 @@
-import { useCalendarContext } from '../../../../context/calendar-context'
-import { isSameDay } from 'date-fns'
-import { hours } from './calendar-body-margin-day-margin'
-import CalendarBodyHeader from '../calendar-body-header'
-import CalendarEvent from '../../calendar-event'
+import { useCalendarContext } from '../../../../context/calendar-context';
+import { isSameDay } from 'date-fns';
+import { hours } from './calendar-body-margin-day-margin';
+import CalendarBodyHeader from '../calendar-body-header';
+import CalendarEvent from '../../calendar-event';
 
 export default function CalendarBodyDayContent({ date }: { date: Date }) {
-  const { events } = useCalendarContext()
+  const { events } = useCalendarContext();
 
-  const dayEvents = events.filter((event) => isSameDay(event.start_date, date))
+  const dayEvents = events.filter((event) => isSameDay(event.start_date, date));
 
   return (
-    <div className="flex flex-col flex-grow">
+    <div className='flex flex-grow flex-col'>
       <CalendarBodyHeader date={date} />
 
-      <div className="flex-1 relative">
+      <div className='relative flex-1'>
         {hours.map((hour) => (
-          <div key={hour} className="h-32 border-b border-border/50 group" />
+          <div key={hour} className='group h-32 border-b border-border/50' />
         ))}
 
         {dayEvents.map((event) => (
@@ -23,5 +23,5 @@ export default function CalendarBodyDayContent({ date }: { date: Date }) {
         ))}
       </div>
     </div>
-  )
+  );
 }

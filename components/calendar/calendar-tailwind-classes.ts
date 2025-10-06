@@ -63,4 +63,4 @@ export const colorOptions = [
       dark: 'dark:bg-emerald-700 dark:border-emerald-700 bg-emerald-700/10 text-emerald-700',
     },
   },
-]
+];
