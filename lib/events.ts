@@ -2,6 +2,7 @@ import { CalendarEvent } from '@/types/calendar-types';
 import { createClient } from './supabase/client';
 import { PostgrestError } from '@supabase/supabase-js';
 import { UserWithRole } from '@/types/globals';
+import { Database } from '@/types/supabase.types';
 
 const supabase = createClient();
 

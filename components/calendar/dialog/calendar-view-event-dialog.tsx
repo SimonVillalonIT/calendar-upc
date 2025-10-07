@@ -122,7 +122,7 @@ function CalendarViewEventDialog() {
             </Badge>
           </div>
 
-          {selectedEvent.author?.name && (
+          {selectedEvent.author?.name && selectedEvent.priority !== 3 && (
             <div className='flex items-center space-x-2'>
               <User className='h-4 w-4 text-gray-500' />
               <span className='text-sm font-medium'>
