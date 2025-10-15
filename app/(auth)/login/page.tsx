@@ -46,8 +46,6 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <form action={handleSubmit}>
-          {' '}
-          {/* The form action calls the handleSubmit function directly */}
           <CardContent className='grid gap-4'>
             <div className='grid gap-2'>
               <Label htmlFor='email'>DNI</Label>
@@ -67,8 +65,6 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter>
             <Button className='w-full' type='submit' disabled={isPending}>
-              {' '}
-              {/* The button must be inside the form */}
               {isPending ? 'Entrando...' : 'Iniciar Sesión'}
             </Button>
           </CardFooter>

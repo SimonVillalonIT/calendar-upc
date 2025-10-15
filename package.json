@@ -2,6 +2,11 @@
   "name": "calendar",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Simon Villalon",
+    "email": "simonvillalon9@gmail.com",
+    "url": "https://github.com/SimonVillalonIT"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

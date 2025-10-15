@@ -1,5 +1,6 @@
 'use client';
 import { useUser } from '@/context/user-context';
+import { Loader } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -19,7 +20,7 @@ export default function DashboardLayout({
     }
   }, [user, router, isLoading]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader className="animate-spin mx-auto mt-20" /> 
 
   return <>{children}</>;
 }
