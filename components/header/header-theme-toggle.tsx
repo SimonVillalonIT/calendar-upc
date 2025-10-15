@@ -48,7 +48,7 @@ export function HeaderThemeToggle() {
             className='mr-2'
             aria-hidden='true'
           />
-          <span>System</span>
+          <span>Sistema</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
