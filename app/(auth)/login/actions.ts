@@ -1,11 +1,12 @@
 'use server';
 
+import { DOMAIN } from '@/lib/constants';
 import { createClient } from '@/lib/supabase/server';
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
   const data = {
-    email: formData.get('email') as string,
+    email: `${formData.get('email')}${DOMAIN}`,
     password: formData.get('password') as string,
   };
 

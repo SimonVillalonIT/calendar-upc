@@ -33,6 +33,6 @@ export default function CalendarBodyDayEvents() {
       </div>
     </div>
   ) : (
-    <div className='p-2 text-muted-foreground'>No events today...</div>
+    <div className='p-2 text-muted-foreground'>No hay eventos hoy...</div>
   );
 }

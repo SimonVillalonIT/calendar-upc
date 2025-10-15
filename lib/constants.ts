@@ -5,3 +5,5 @@ export const PRIORITIES = {
   2: 'Importante',
   3: 'Feriado',
 };
+
+export const DOMAIN = '@upc.com';

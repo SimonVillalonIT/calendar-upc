@@ -50,12 +50,12 @@ export default function LoginPage() {
           {/* The form action calls the handleSubmit function directly */}
           <CardContent className='grid gap-4'>
             <div className='grid gap-2'>
-              <Label htmlFor='email'>Email</Label>
+              <Label htmlFor='email'>DNI</Label>
               <Input
                 id='email'
                 name='email'
-                type='email'
-                placeholder='email@ejemplo.com'
+                type='text'
+                placeholder='12345678'
                 required
               />
             </div>
