@@ -15,35 +15,32 @@ export default function CalendarDemo() {
 
   const { user, isLoading } = useUser();
 
-  const fetchEvents = useCallback(
-    async () => {
-      if (isLoading) return;
+  const fetchEvents = useCallback(async () => {
+    if (isLoading) return;
 
-      setLoading(true);
-      try {
-        const { data, error } = await getEvents(user);
-        if (data) {
-          setEvents(data);
-        } else {
-          console.log(error);
-          setEvents([]);
-        }
-      } catch (error) {
+    setLoading(true);
+    try {
+      const { data, error } = await getEvents(user);
+      if (data) {
+        setEvents(data);
+      } else {
         console.log(error);
         setEvents([]);
-      } finally {
-        setLoading(false);
       }
-    },
-    [user, isLoading]
-  );
+    } catch (error) {
+      console.log(error);
+      setEvents([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [user, isLoading]);
 
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
 
   return loading ? (
-    <Loader className="animate-spin mx-auto mt-20" />
+    <Loader className='mx-auto mt-20 animate-spin' />
   ) : (
     <Calendar
       events={events}

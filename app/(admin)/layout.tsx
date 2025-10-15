@@ -20,7 +20,7 @@ export default function DashboardLayout({
     }
   }, [user, router, isLoading]);
 
-  if (isLoading) return <Loader className="animate-spin mx-auto mt-20" /> 
+  if (isLoading) return <Loader className='mx-auto mt-20 animate-spin' />;
 
   return <>{children}</>;
 }
