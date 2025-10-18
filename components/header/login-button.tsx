@@ -76,18 +76,18 @@ export default function LoginButton() {
             </div>
           </div>
         </DropdownMenuLabel>
-
         <DropdownMenuSeparator />
-
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User2Icon className='mr-2 h-4 w-4' />
-            Perfil
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-
+        {user.role === 1 && (
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <Link className='flex items-center' href='/registro-nuevo-usuario'>
+                <User2Icon className='mr-2 h-4 w-4' />
+                Crear Usuario Nuevo
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        )}
         <DropdownMenuSeparator />
-
         <DropdownMenuItem
           onClick={signOut}
           className='text-red-600 focus:text-red-600'

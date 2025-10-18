@@ -123,7 +123,7 @@ export default function CalendarBodyMonth() {
                 ))}
                 {dayEvents.length > 3 && (
                   <div
-                    className='text-xs text-muted-foreground cursor-pointer select-none'
+                    className='cursor-pointer select-none text-xs text-muted-foreground'
                     onClick={(e) => {
                       e.stopPropagation();
                       setDate(day);
