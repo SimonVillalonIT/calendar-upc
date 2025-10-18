@@ -20,19 +20,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { TARGETS } from '@/lib/constants';
+import { DOMAIN, TARGETS } from '@/lib/constants';
 
 export default function RegisterPage() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState('');
-  const [role, setRole] = useState<number>(2); // Estado para el campo 'role'
+  const [role, setRole] = useState<number>(2);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Previene el envío por defecto de la etiqueta <form>
+    e.preventDefault();
     setError('');
 
-    // Obtener datos del formulario
     const formData = new FormData(e.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
@@ -50,7 +49,12 @@ export default function RegisterPage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email, password, role, name }),
+          body: JSON.stringify({
+            email: `${email}${DOMAIN}`,
+            password,
+            role,
+            name,
+          }),
         });
 
         const result = await response.json();
@@ -62,7 +66,7 @@ export default function RegisterPage() {
           return;
         }
 
-        router.push('/login'); // Redirige al inicio de sesión
+        router.push('/login');
       } catch (err) {
         console.error(err);
         setError('Error de red. Inténtalo de nuevo más tarde.');
@@ -92,12 +96,12 @@ export default function RegisterPage() {
               />
             </div>
             <div className='grid gap-2'>
-              <Label htmlFor='email'>Email</Label>
+              <Label htmlFor='email'>DNI</Label>
               <Input
                 id='email'
                 name='email'
-                type='email'
-                placeholder='email@ejemplo.com'
+                type='text'
+                placeholder='12345678X'
                 required
               />
             </div>

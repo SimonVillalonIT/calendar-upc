@@ -1,3 +1,5 @@
+'use client';
+
 import { useCalendarContext } from '../../../../context/calendar-context';
 import {
   startOfMonth,
@@ -12,14 +14,15 @@ import {
 } from 'date-fns';
 import { cn } from '@/lib/utils';
 import CalendarEvent from '../../calendar-event';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useMemo } from 'react';
 
 export default function CalendarBodyMonth() {
   const { date, events, setDate, setMode } = useCalendarContext();
 
+  // 🔹 Rango del mes visible
   const monthStart = startOfMonth(date);
   const monthEnd = endOfMonth(date);
-
   const calendarStart = startOfWeek(monthStart, { weekStartsOn: 1 });
   const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 });
 
@@ -30,20 +33,31 @@ export default function CalendarBodyMonth() {
 
   const today = new Date();
 
-  const visibleEvents = events.filter(
-    (event) =>
-      isWithinInterval(event.start_date, {
-        start: calendarStart,
-        end: calendarEnd,
-      }) ||
-      isWithinInterval(event.end_date, {
-        start: calendarStart,
-        end: calendarEnd,
-      })
-  );
+  // ✅ Recalcular y parsear fechas con useMemo
+  const visibleEvents = useMemo(() => {
+    const parsed = events.map((event) => ({
+      ...event,
+      start_date: new Date(event.start_date),
+      end_date: new Date(event.end_date),
+    }));
+
+    return parsed.filter(
+      (event) =>
+        isWithinInterval(event.start_date, {
+          start: calendarStart,
+          end: calendarEnd,
+        }) ||
+        isWithinInterval(event.end_date, {
+          start: calendarStart,
+          end: calendarEnd,
+        }) ||
+        (event.start_date < calendarStart && event.end_date > calendarEnd)
+    );
+  }, [events, calendarStart, calendarEnd]);
 
   return (
     <div className='flex flex-grow flex-col overflow-hidden'>
+      {/* Cabecera */}
       <div className='hidden grid-cols-7 divide-x divide-border border-border md:grid'>
         {['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb', 'Dom'].map((day) => (
           <div
@@ -55,82 +69,75 @@ export default function CalendarBodyMonth() {
         ))}
       </div>
 
-      <AnimatePresence mode='wait' initial={false}>
-        <motion.div
-          key={monthStart.toISOString()}
-          className='relative grid flex-grow overflow-y-auto md:grid-cols-7'
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{
-            duration: 0.2,
-            ease: 'easeInOut',
-          }}
-        >
-          {calendarDays.map((day) => {
-            const dayEvents = visibleEvents.filter((event) =>
-              isSameDay(event.start_date, day)
-            );
-            const isToday = isSameDay(day, today);
-            const isCurrentMonth = isSameMonth(day, date);
+      {/* 💡 Motion sin AnimatePresence (layout inteligente) */}
+      <motion.div
+        layout
+        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        transition={{ duration: 0.2, ease: 'easeInOut' }}
+        className='relative grid flex-grow overflow-y-auto md:grid-cols-7'
+      >
+        {calendarDays.map((day) => {
+          const dayEvents = visibleEvents.filter((event) =>
+            isWithinInterval(day, {
+              start: event.start_date,
+              end: event.end_date,
+            })
+          );
 
-            return (
+          const isToday = isSameDay(day, today);
+          const isCurrentMonth = isSameMonth(day, date);
+
+          return (
+            <div
+              key={`${format(day, 'yyyy-MM-dd')}`}
+              className={cn(
+                'relative flex aspect-square cursor-pointer flex-col border-b border-r p-2 transition-colors hover:bg-accent/30',
+                !isCurrentMonth && 'hidden bg-muted/50 md:flex'
+              )}
+              onClick={(e) => {
+                e.stopPropagation();
+                setDate(day);
+                setMode('day');
+              }}
+            >
+              {/* Número de día */}
               <div
-                key={day.toISOString()}
                 className={cn(
-                  'relative flex aspect-square cursor-pointer flex-col border-b border-r p-2',
-                  !isCurrentMonth && 'hidden bg-muted/50 md:flex'
+                  'flex aspect-square w-fit flex-col items-center justify-center rounded-full p-1 text-sm font-medium',
+                  isToday && 'bg-primary text-background'
                 )}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDate(day);
-                  setMode('day');
-                }}
               >
-                <div
-                  className={cn(
-                    'flex aspect-square w-fit flex-col items-center justify-center rounded-full p-1 text-sm font-medium',
-                    isToday && 'bg-primary text-background'
-                  )}
-                >
-                  {format(day, 'd')}
-                </div>
-                <AnimatePresence mode='wait'>
-                  <div className='mt-1 flex flex-col gap-1'>
-                    {dayEvents.slice(0, 3).map((event) => (
-                      <CalendarEvent
-                        key={event.id}
-                        event={event}
-                        className='relative h-auto'
-                        month
-                      />
-                    ))}
-                    {dayEvents.length > 3 && (
-                      <motion.div
-                        key={`more-${day.toISOString()}`}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{
-                          duration: 0.2,
-                        }}
-                        className='text-xs text-muted-foreground'
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setDate(day);
-                          setMode('day');
-                        }}
-                      >
-                        +{dayEvents.length - 3} more
-                      </motion.div>
-                    )}
-                  </div>
-                </AnimatePresence>
+                {format(day, 'd')}
               </div>
-            );
-          })}
-        </motion.div>
-      </AnimatePresence>
+
+              {/* Eventos */}
+              <div className='mt-1 flex flex-col gap-1'>
+                {dayEvents.slice(0, 3).map((event) => (
+                  <CalendarEvent
+                    key={`${event.id}-${day.toISOString()}`}
+                    event={event}
+                    className='relative h-auto'
+                    month
+                  />
+                ))}
+                {dayEvents.length > 3 && (
+                  <div
+                    className='text-xs text-muted-foreground cursor-pointer select-none'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setDate(day);
+                      setMode('day');
+                    }}
+                  >
+                    +{dayEvents.length - 3} más
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </motion.div>
     </div>
   );
 }
