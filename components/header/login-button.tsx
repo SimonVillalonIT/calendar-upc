@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { User2Icon, LogOutIcon } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -80,7 +80,10 @@ export default function LoginButton() {
         {user.role === 1 && (
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <Link className='flex items-center' href='/registro-nuevo-usuario'>
+              <Link
+                className='flex items-center'
+                href='/registro-nuevo-usuario'
+              >
                 <User2Icon className='mr-2 h-4 w-4' />
                 Crear Usuario Nuevo
               </Link>
