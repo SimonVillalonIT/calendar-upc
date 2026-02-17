@@ -79,13 +79,39 @@ export default function LoginButton() {
         <DropdownMenuSeparator />
         {user.role === 1 && (
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link
-                className='flex items-center'
+                className='flex cursor-pointer items-center justify-start'
                 href='/registro-nuevo-usuario'
               >
                 <User2Icon className='mr-2 h-4 w-4' />
                 Crear Usuario Nuevo
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                className='flex cursor-pointer items-center justify-start'
+                href='/cambiar-contrasena'
+              >
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  className='lucide lucide-user-round-key'
+                >
+                  <path d='M19 11v6' />
+                  <path d='M19 13h2' />
+                  <path d='M2 21a8 8 0 0 1 12.868-6.349' />
+                  <circle cx='10' cy='8' r='5' />
+                  <circle cx='19' cy='19' r='2' />
+                </svg>
+                Cambiar Contraseña
               </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
