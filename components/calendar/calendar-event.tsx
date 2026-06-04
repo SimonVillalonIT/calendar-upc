@@ -1,6 +1,12 @@
 import { CalendarEvent as CalendarEventType } from '@/types/calendar-types';
 import { useCalendarContext } from '@/context/calendar-context';
-import { format, isSameDay, isSameMonth } from 'date-fns';
+import {
+  format,
+  isSameDay,
+  isSameMonth,
+  startOfDay,
+  endOfDay,
+} from 'date-fns';
 import { cn, getColorForPriority } from '@/lib/utils';
 import { motion, MotionConfig, AnimatePresence } from 'framer-motion';
 
@@ -13,43 +19,73 @@ interface EventPosition {
 
 function getOverlappingEvents(
   currentEvent: CalendarEventType,
-  events: CalendarEventType[]
+  events: CalendarEventType[],
+  currentDate?: Date
 ): CalendarEventType[] {
+  const getEffectiveRange = (e: CalendarEventType) => {
+    const start =
+      currentDate && !isSameDay(e.start_date, currentDate)
+        ? new Date(new Date(currentDate).setHours(0, 0, 0, 0))
+        : e.start_date;
+    const end =
+      currentDate && !isSameDay(e.end_date, currentDate)
+        ? new Date(new Date(currentDate).setHours(23, 59, 59, 999))
+        : e.end_date;
+    return { start, end };
+  };
+
+  const currentRange = getEffectiveRange(currentEvent);
+
   return events.filter((event) => {
     if (event.id === currentEvent.id) return false;
+
+    const eventRange = getEffectiveRange(event);
+
     return (
-      currentEvent.start_date < event.end_date &&
-      currentEvent.end_date > event.start_date &&
-      isSameDay(currentEvent.start_date, event.start_date)
+      currentRange.start < eventRange.end && currentRange.end > eventRange.start
     );
   });
 }
 
 function calculateEventPosition(
   event: CalendarEventType,
-  allEvents: CalendarEventType[]
+  allEvents: CalendarEventType[],
+  currentDate?: Date
 ): EventPosition {
-  const overlappingEvents = getOverlappingEvents(event, allEvents);
-  const group = [event, ...overlappingEvents].sort(
-    (a, b) => a.start_date.getTime() - b.start_date.getTime()
+  const dayStart = startOfDay(currentDate || new Date());
+  const dayEnd = endOfDay(currentDate || new Date());
+
+  const dayEvents = allEvents.filter(
+    (e) => e.start_date <= dayEnd && e.end_date >= dayStart
   );
+
+  const overlappingEvents = getOverlappingEvents(event, dayEvents, currentDate);
+  const group = [event, ...overlappingEvents].sort((a, b) => {
+    if (a.start_date.getTime() !== b.start_date.getTime()) {
+      return a.start_date.getTime() - b.start_date.getTime();
+    }
+    return a.id.localeCompare(b.id);
+  });
+
   const position = group.indexOf(event);
   const width = `${100 / (overlappingEvents.length + 1)}%`;
   const left = `${(position * 100) / (overlappingEvents.length + 1)}%`;
 
-  const startDate = new Date(event.start_date);
-  const endDate = new Date(event.end_date);
+  const effectiveStartDate =
+    currentDate && !isSameDay(event.start_date, currentDate)
+      ? new Date(currentDate.setHours(0, 0, 0, 0))
+      : event.start_date;
 
-  const startHour = startDate.getHours();
-  const startMinutes = startDate.getMinutes();
+  const effectiveEndDate =
+    currentDate && !isSameDay(event.end_date, currentDate)
+      ? new Date(currentDate.setHours(23, 59, 59, 999))
+      : event.end_date;
 
-  let endHour = endDate.getHours();
-  let endMinutes = endDate.getMinutes();
+  const startHour = effectiveStartDate.getHours();
+  const startMinutes = effectiveStartDate.getMinutes();
 
-  if (!isSameDay(event.start_date, event.end_date)) {
-    endHour = 23;
-    endMinutes = 59;
-  }
+  const endHour = effectiveEndDate.getHours();
+  const endMinutes = effectiveEndDate.getMinutes();
 
   const topPosition = startHour * 128 + (startMinutes / 60) * 128;
   const duration = endHour * 60 + endMinutes - (startHour * 60 + startMinutes);
@@ -67,14 +103,18 @@ export default function CalendarEvent({
   event,
   month = false,
   className,
+  currentDate,
 }: {
   event: CalendarEventType;
   month?: boolean;
   className?: string;
+  currentDate?: Date;
 }) {
   const { events, setSelectedEvent, setViewEventDialogOpen, date } =
     useCalendarContext();
-  const style = month ? {} : calculateEventPosition(event, events);
+  const style = month
+    ? {}
+    : calculateEventPosition(event, events, currentDate || date);
 
   const isEventInCurrentMonth = isSameMonth(event.start_date, date);
   const animationKey = `${event.id}-${
@@ -126,7 +166,7 @@ export default function CalendarEvent({
               ease: 'easeOut',
             },
           }}
-          layoutId={`event-${animationKey}-${month ? 'month' : 'day'}`}
+          layoutId={`event-${animationKey}-${month ? 'month' : 'day'}${currentDate ? `-${format(currentDate, 'yyyy-MM-dd')}` : ''}`}
         >
           <motion.div
             className={cn(

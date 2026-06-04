@@ -16,7 +16,7 @@ export default function CalendarDemo() {
   const { user, isLoading } = useUser();
 
   const fetchEvents = useCallback(async () => {
-    if (isLoading) return;
+    if (isLoading || !user) return;
 
     setLoading(true);
     try {

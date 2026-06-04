@@ -195,13 +195,13 @@ export default function CalendarNewEventDialog() {
                         {PRIORITIES[1]}
                       </SelectItem>
                       <SelectItem
-                        className='cursor-pointer text-yellow-500 focus:text-yellow-700'
+                        className='cursor-pointer text-blue-500 focus:text-blue-700'
                         value='2'
                       >
                         {PRIORITIES[2]}
                       </SelectItem>
                       <SelectItem
-                        className='cursor-pointer text-blue-500 focus:text-blue-700'
+                        className='cursor-pointer text-orange-500 focus:text-orange-700'
                         value='3'
                       >
                         {PRIORITIES[3]}

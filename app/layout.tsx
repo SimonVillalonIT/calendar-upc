@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { UserProvider } from '@/context/user-context';
 import Header from '@/components/header/header';
+import { getOptionalServerUserRole } from '@/lib/supabase/user';
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -24,11 +25,13 @@ export const metadata: Metadata = {
   description: 'By Simón Villalón',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getOptionalServerUserRole();
+
   return (
     <html
       lang='en'
@@ -43,7 +46,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <UserProvider>
+          <UserProvider initialUserData={user}>
             <Header />
             {children}
           </UserProvider>

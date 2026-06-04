@@ -1,11 +1,17 @@
 import { getColorForPriority } from '@/lib/utils';
 import { useCalendarContext } from '../../../../context/calendar-context';
-import { isSameDay } from 'date-fns';
+import { endOfDay, startOfDay } from 'date-fns';
 
 export default function CalendarBodyDayEvents() {
   const { events, date, setManageEventDialogOpen, setSelectedEvent } =
     useCalendarContext();
-  const dayEvents = events.filter((event) => isSameDay(event.start_date, date));
+
+  const dayStart = startOfDay(date);
+  const dayEnd = endOfDay(date);
+
+  const dayEvents = events.filter(
+    (event) => event.start_date <= dayEnd && event.end_date >= dayStart
+  );
 
   return !!dayEvents.length ? (
     <div className='flex flex-col gap-2'>

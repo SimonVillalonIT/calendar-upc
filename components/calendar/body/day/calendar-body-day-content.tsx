@@ -1,5 +1,5 @@
 import { useCalendarContext } from '../../../../context/calendar-context';
-import { isSameDay } from 'date-fns';
+import { endOfDay, startOfDay } from 'date-fns';
 import { hours } from './calendar-body-margin-day-margin';
 import CalendarBodyHeader from '../calendar-body-header';
 import CalendarEvent from '../../calendar-event';
@@ -7,7 +7,12 @@ import CalendarEvent from '../../calendar-event';
 export default function CalendarBodyDayContent({ date }: { date: Date }) {
   const { events } = useCalendarContext();
 
-  const dayEvents = events.filter((event) => isSameDay(event.start_date, date));
+  const dayStart = startOfDay(date);
+  const dayEnd = endOfDay(date);
+
+  const dayEvents = events.filter(
+    (event) => event.start_date <= dayEnd && event.end_date >= dayStart
+  );
 
   return (
     <div className='flex flex-grow flex-col'>
@@ -19,7 +24,7 @@ export default function CalendarBodyDayContent({ date }: { date: Date }) {
         ))}
 
         {dayEvents.map((event) => (
-          <CalendarEvent key={event.id} event={event} />
+          <CalendarEvent key={event.id} event={event} currentDate={date} />
         ))}
       </div>
     </div>

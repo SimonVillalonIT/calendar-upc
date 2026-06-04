@@ -11,6 +11,8 @@ import {
   isSameDay,
   format,
   isWithinInterval,
+  startOfDay,
+  endOfDay,
 } from 'date-fns';
 import { cn } from '@/lib/utils';
 import CalendarEvent from '../../calendar-event';
@@ -35,23 +37,9 @@ export default function CalendarBodyMonth() {
 
   // ✅ Recalcular y parsear fechas con useMemo
   const visibleEvents = useMemo(() => {
-    const parsed = events.map((event) => ({
-      ...event,
-      start_date: new Date(event.start_date),
-      end_date: new Date(event.end_date),
-    }));
-
-    return parsed.filter(
+    return events.filter(
       (event) =>
-        isWithinInterval(event.start_date, {
-          start: calendarStart,
-          end: calendarEnd,
-        }) ||
-        isWithinInterval(event.end_date, {
-          start: calendarStart,
-          end: calendarEnd,
-        }) ||
-        (event.start_date < calendarStart && event.end_date > calendarEnd)
+        event.start_date <= calendarEnd && event.end_date >= calendarStart
     );
   }, [events, calendarStart, calendarEnd]);
 
@@ -78,11 +66,11 @@ export default function CalendarBodyMonth() {
         className='relative grid flex-grow overflow-y-auto md:grid-cols-7'
       >
         {calendarDays.map((day) => {
-          const dayEvents = visibleEvents.filter((event) =>
-            isWithinInterval(day, {
-              start: event.start_date,
-              end: event.end_date,
-            })
+          const dayStart = startOfDay(day);
+          const dayEnd = endOfDay(day);
+
+          const dayEvents = visibleEvents.filter(
+            (event) => event.start_date <= dayEnd && event.end_date >= dayStart
           );
 
           const isToday = isSameDay(day, today);
@@ -119,6 +107,7 @@ export default function CalendarBodyMonth() {
                     event={event}
                     className='relative h-auto'
                     month
+                    currentDate={day}
                   />
                 ))}
                 {dayEvents.length > 3 && (

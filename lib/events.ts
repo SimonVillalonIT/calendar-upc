@@ -9,26 +9,33 @@ const supabase = createClient();
 export async function getEvents(
   user: UserWithRole | null
 ): Promise<{ data: CalendarEvent[] | null; error: PostgrestError | null }> {
+  let response;
   if (user && user.role === 2) {
     // @ts-expect-error: RPC function type not in generated types
-    const { data, error } = (await supabase.rpc(
-      'get_events_for_teacher_and_students',
-      { _teacher_id: user.id }
-    )) as Database['public']['Functions']['get_events_with_author'];
-    return { data: data as CalendarEvent[], error };
-  }
-  if (user && user.role === 1) {
+    response = await supabase.rpc('get_events_for_teacher_and_students', {
+      _teacher_id: user.id,
+    });
+  } else if (user && user.role === 1) {
     // @ts-expect-error: RPC function type not in generated types
-    const { data, error } = (await supabase.rpc(
-      'get_events_with_author'
-    )) as Database['public']['Functions']['get_events_with_author'];
-    return { data: data as CalendarEvent[], error };
+    response = await supabase.rpc('get_events_with_author');
+  } else {
+    // @ts-expect-error: RPC function type not in generated types
+    response = await supabase.rpc('get_events_for_students');
   }
-  // @ts-expect-error: RPC function type not in generated types
-  const { data, error } = (await supabase.rpc(
-    'get_events_for_students'
-  )) as Database['public']['Functions']['get_events_with_author'];
-  return { data: data as CalendarEvent[], error };
+
+  const { data, error } = response;
+
+  if (error) {
+    return { data: null, error };
+  }
+
+  const parsedData = (data as any[]).map((event) => ({
+    ...event,
+    start_date: new Date(event.start_date.replace(' ', 'T')),
+    end_date: new Date(event.end_date.replace(' ', 'T')),
+  })) as CalendarEvent[];
+
+  return { data: parsedData, error: null };
 }
 
 export async function addEvent(values: {
