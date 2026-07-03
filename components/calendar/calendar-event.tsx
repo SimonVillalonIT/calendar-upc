@@ -1,12 +1,6 @@
 import { CalendarEvent as CalendarEventType } from '@/types/calendar-types';
 import { useCalendarContext } from '@/context/calendar-context';
-import {
-  format,
-  isSameDay,
-  isSameMonth,
-  startOfDay,
-  endOfDay,
-} from 'date-fns';
+import { format, isSameDay, isSameMonth, startOfDay, endOfDay } from 'date-fns';
 import { cn, getColorForPriority } from '@/lib/utils';
 import { motion, MotionConfig, AnimatePresence } from 'framer-motion';
 

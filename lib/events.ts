@@ -11,15 +11,12 @@ export async function getEvents(
 ): Promise<{ data: CalendarEvent[] | null; error: PostgrestError | null }> {
   let response;
   if (user && user.role === 2) {
-    // @ts-expect-error: RPC function type not in generated types
     response = await supabase.rpc('get_events_for_teacher_and_students', {
       _teacher_id: user.id,
     });
   } else if (user && user.role === 1) {
-    // @ts-expect-error: RPC function type not in generated types
     response = await supabase.rpc('get_events_with_author');
   } else {
-    // @ts-expect-error: RPC function type not in generated types
     response = await supabase.rpc('get_events_for_students');
   }
 
